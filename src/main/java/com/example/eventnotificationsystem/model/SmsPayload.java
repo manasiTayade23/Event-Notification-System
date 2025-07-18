@@ -1,5 +1,8 @@
 package com.example.eventnotificationsystem.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 public class SmsPayload extends EventPayload {
 
     @NotBlank(message = "Phone number cannot be blank")

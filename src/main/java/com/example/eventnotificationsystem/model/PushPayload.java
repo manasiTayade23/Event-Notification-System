@@ -1,5 +1,8 @@
 package com.example.eventnotificationsystem.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 public class PushPayload extends EventPayload {
 
     @NotBlank(message = "Device ID cannot be blank")

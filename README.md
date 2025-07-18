@@ -43,7 +43,159 @@ A robust, asynchronous event notification system built with Spring Boot that pro
 - **Payload Classes**: `EmailPayload`, `SmsPayload`, `PushPayload`
 - **Response Models**: `EventResponse`, `CallbackRequest`
 
-## 📋 API Endpoints
+## 🎯 OOP Design Patterns & Technical Implementation
+
+### **Solid Java Fundamentals with Proper OOP Design**
+
+#### **1. Inheritance & Polymorphism**
+- **Abstract Base Class**: `Event` serves as the base class for all event types
+- **Concrete Implementations**: `EmailEvent`, `SmsEvent`, `PushEvent` extend `Event`
+- **Polymorphic Processing**: `EventProcessor` handles different event types through common `Event` interface
+- **Method Overriding**: Each event type can override base methods if needed
+
+#### **2. Encapsulation**
+- **Private Fields**: All model classes use private fields with public getters/setters
+- **Data Hiding**: Internal queue management in `EventService` is encapsulated
+- **Controlled Access**: Thread-safe operations through synchronized methods and volatile variables
+
+#### **3. Abstraction**
+- **Abstract Classes**: `Event` and `EventPayload` provide abstraction layers
+- **Interface Segregation**: Clean separation between different event types
+- **Implementation Hiding**: Processing logic is abstracted behind service interfaces
+
+#### **4. Composition & Aggregation**
+- **Service Composition**: `EventProcessor` composes `EventService` and `CallbackService`
+- **Queue Aggregation**: `EventService` aggregates multiple `BlockingQueue` instances
+- **Dependency Injection**: Spring's IoC container manages object relationships
+
+### **Robust REST API with Validation and Error Handling**
+
+#### **1. Input Validation**
+- **Bean Validation**: Uses `@NotNull`, `@NotBlank`, `@Email` annotations
+- **Custom Validation**: Event-specific validation in `EventController.validateAndConvertEvent()`
+- **Error Responses**: Proper HTTP status codes (400 Bad Request) for validation failures
+
+#### **2. Error Handling**
+- **Exception Handling**: `@ExceptionHandler` for global exception management
+- **Graceful Degradation**: System continues processing even if callbacks fail
+- **Detailed Error Messages**: Specific validation error messages for debugging
+
+#### **3. RESTful Design**
+- **Resource-Oriented**: `/api/events` follows REST conventions
+- **HTTP Methods**: Proper use of POST for event creation
+- **Content Negotiation**: JSON request/response handling
+
+### **Efficient Concurrency with Separate Queues and Threads**
+
+#### **1. Thread Pool Management**
+- **Fixed Thread Pool**: `ExecutorService.newFixedThreadPool(3)` for controlled concurrency
+- **Dedicated Threads**: One thread per event type ensures isolation
+- **Thread Safety**: `BlockingQueue` provides thread-safe operations
+
+#### **2. Queue Implementation**
+- **BlockingQueue**: `LinkedBlockingQueue` for thread-safe FIFO operations
+- **Non-blocking Operations**: `offer()` method prevents blocking on queue full
+- **Fair Scheduling**: Events processed in order of arrival
+
+#### **3. Synchronization Mechanisms**
+- **Volatile Variables**: `running` and `acceptingEvents` flags for thread communication
+- **Atomic Operations**: Queue operations are inherently thread-safe
+- **Proper Shutdown**: `@PreDestroy` ensures clean thread termination
+
+### **Reliable Async Processing with FIFO Ordering**
+
+#### **1. Asynchronous Architecture**
+- **Non-blocking API**: Event submission returns immediately
+- **Background Processing**: Events processed in separate threads
+- **Callback Pattern**: Asynchronous status updates via HTTP callbacks
+
+#### **2. FIFO Implementation**
+- **Queue-based Processing**: `BlockingQueue.take()` ensures FIFO order
+- **Event Ordering**: Events processed in exact order of submission
+- **Type-specific Queues**: Each event type maintains its own FIFO order
+
+#### **3. Processing Guarantees**
+- **At-least-once Processing**: Events are guaranteed to be processed
+- **Failure Isolation**: One event failure doesn't affect others
+- **Status Tracking**: Every event gets a callback with final status
+
+### **Comprehensive Testing Covering All Major Scenarios**
+
+#### **1. Unit Testing Framework**
+- **JUnit 5**: Modern testing framework with `@Test` annotations
+- **Spring Boot Test**: Integration testing with `@SpringBootTest`
+- **MockMvc**: Web layer testing for REST endpoints
+
+#### **2. Test Coverage**
+- **Service Layer**: `EventServiceTest` covers business logic
+- **Controller Layer**: `EventControllerTest` covers API endpoints
+- **Integration Testing**: `EventProcessorTest` covers end-to-end processing
+
+#### **3. Mocking & Stubbing**
+- **MockServer**: HTTP callback testing with mock server
+- **Reflection**: Testing private fields for state verification
+- **Test Isolation**: Each test runs in isolated context
+
+### **Production-Ready Dockerization for Easy Deployment**
+
+#### **1. Multi-stage Build**
+- **Base Image**: `openjdk:17-jdk-slim` for optimized container size
+- **JAR Packaging**: Spring Boot fat JAR with all dependencies
+- **Port Exposure**: Proper port mapping for external access
+
+#### **2. Container Orchestration**
+- **Docker Compose**: Multi-service orchestration ready
+- **Health Checks**: Container health monitoring
+- **Resource Management**: Memory and CPU limits configurable
+
+#### **3. Deployment Ready**
+- **Environment Variables**: Configurable via environment
+- **Logging**: Structured logging for production monitoring
+- **Graceful Shutdown**: Proper signal handling for container termination
+
+### **Design Patterns Used**
+
+#### **1. Factory Pattern**
+- **Event Creation**: `EventController` acts as factory for creating specific event types
+- **Payload Conversion**: Converts generic payloads to specific event types
+
+#### **2. Observer Pattern**
+- **Callback System**: Event processing notifies observers via HTTP callbacks
+- **Status Updates**: Real-time status updates to external systems
+
+#### **3. Strategy Pattern**
+- **Event Processing**: Different processing strategies for each event type
+- **Queue Management**: Different queues for different event types
+
+#### **4. Template Method Pattern**
+- **Event Processing**: Common processing template with type-specific delays
+- **Callback Handling**: Common callback structure with type-specific data
+
+### **Technical Stack Details**
+
+#### **1. Spring Framework Features**
+- **Dependency Injection**: `@Autowired` for loose coupling
+- **AOP**: `@PostConstruct` and `@PreDestroy` for lifecycle management
+- **Validation**: Bean Validation API integration
+- **Web MVC**: RESTful web services with Spring Web
+
+#### **2. Java Concurrency**
+- **ExecutorService**: Thread pool management
+- **BlockingQueue**: Thread-safe queue operations
+- **Volatile Variables**: Thread communication
+- **InterruptedException**: Proper thread interruption handling
+
+#### **3. JSON Processing**
+- **Jackson**: Polymorphic deserialization with `@JsonTypeInfo`
+- **Type Information**: Runtime type resolution for payloads
+- **Custom Serialization**: Structured JSON output
+
+#### **4. HTTP Client**
+- **HttpClient**: Modern HTTP client for callbacks
+- **Async Operations**: Non-blocking HTTP requests
+- **Error Handling**: Robust error handling for network failures
+
+## �� API Endpoints
 
 ### Submit Event
 ```

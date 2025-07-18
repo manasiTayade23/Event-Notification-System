@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 public class EventController {
@@ -13,7 +14,7 @@ public class EventController {
     private EventService eventService;
 
     @PostMapping("/api/events")
-    public ResponseEntity<EventResponse> submitEvent(@RequestBody EventRequest eventRequest) {
+    public ResponseEntity<EventResponse> submitEvent(@Valid @RequestBody EventRequest eventRequest) {
         try {
             Event event = validateAndConvertEvent(eventRequest);
             EventResponse response = eventService.submitEvent(event);

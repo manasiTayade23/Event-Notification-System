@@ -23,7 +23,7 @@ public class EventService {
         switch (event.getEventType()) {
             case EMAIL:
                 emailQueue.offer((EmailEvent) event);
-               TTY: break;
+                break;
             case SMS:
                 smsQueue.offer((SmsEvent) event);
                 break;
