@@ -68,22 +68,6 @@ A robust, asynchronous event notification system built with Spring Boot that pro
 - **Queue Aggregation**: `EventService` aggregates multiple `BlockingQueue` instances
 - **Dependency Injection**: Spring's IoC container manages object relationships
 
-### **Robust REST API with Validation and Error Handling**
-
-#### **1. Input Validation**
-- **Bean Validation**: Uses `@NotNull`, `@NotBlank`, `@Email` annotations
-- **Custom Validation**: Event-specific validation in `EventController.validateAndConvertEvent()`
-- **Error Responses**: Proper HTTP status codes (400 Bad Request) for validation failures
-
-#### **2. Error Handling**
-- **Exception Handling**: `@ExceptionHandler` for global exception management
-- **Graceful Degradation**: System continues processing even if callbacks fail
-- **Detailed Error Messages**: Specific validation error messages for debugging
-
-#### **3. RESTful Design**
-- **Resource-Oriented**: `/api/events` follows REST conventions
-- **HTTP Methods**: Proper use of POST for event creation
-- **Content Negotiation**: JSON request/response handling
 
 ### **Efficient Concurrency with Separate Queues and Threads**
 
@@ -176,8 +160,8 @@ A robust, asynchronous event notification system built with Spring Boot that pro
 #### **1. Spring Framework Features**
 - **Dependency Injection**: `@Autowired` for loose coupling
 - **AOP**: `@PostConstruct` and `@PreDestroy` for lifecycle management
-- **Validation**: Bean Validation API integration
-- **Web MVC**: RESTful web services with Spring Web
+- **Validation**
+- **Web MVC**
 
 #### **2. Java Concurrency**
 - **ExecutorService**: Thread pool management
